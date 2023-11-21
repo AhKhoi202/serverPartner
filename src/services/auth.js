@@ -7,7 +7,7 @@ require('dotenv').config()
 
 const hashPassword = password => bcrypt.hashSync(password, bcrypt.genSaltSync(12))
 
-export const registerService = ({ phone, password, name} ) => new Promise(async (resolve, reject) => {
+export const registerService = ({ phone, password, name, email, address, career} ) => new Promise(async (resolve, reject) => {
     try {
         const response = await db.User.findOrCreate({
             where: { phone },
