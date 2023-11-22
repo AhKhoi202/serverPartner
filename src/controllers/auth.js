@@ -36,8 +36,5 @@ export const login = async (req, res) => {
 }
 
 export const crud = async (req, res) => {
-    
-        return res.send('crud')
-
-    
+        return res.send('crud')   
 }
