@@ -6,6 +6,8 @@ const router = express.Router()
 
 router.use(verifyToken)
 router.get('/get-current', userController.getCurrent)
+router.put('/', userController.updateUser)
+router.post('/new-customers', userController.createCustomers)
 
 
 export default router
