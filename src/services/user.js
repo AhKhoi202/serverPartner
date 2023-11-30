@@ -1,6 +1,5 @@
 import db from "../models";
-import { v4 as generateId } from 'uuid'
-
+import { v4 as generateId } from "uuid";
 
 // GET CURRENT
 export const getOne = (id) =>
@@ -23,6 +22,7 @@ export const getOne = (id) =>
     }
   });
 
+// cap nhat thong tin nguoi dung
 export const updateUser = (payload, id) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -38,6 +38,7 @@ export const updateUser = (payload, id) =>
     }
   });
 
+// tao khach hang tiem nang
 export const createCustomersService = (body, userId) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -49,6 +50,24 @@ export const createCustomersService = (body, userId) =>
       resolve({
         err: 0,
         msg: "Create",
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+// hien thi thong tin khach hang
+export const getCustomers = (userId) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Customer.findAll({
+        where: { userId },
+        raw: true,
+      });
+      resolve({
+        err: response ? 0 : 1,
+        msg: response ? "Get customers ok" : "Failed to get customers .",
+        response,
       });
     } catch (error) {
       reject(error);

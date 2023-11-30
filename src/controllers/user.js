@@ -12,6 +12,8 @@ export const getCurrent = async (req, res) => {
     });
   }
 };
+
+// sua thong tin nguoi dung
 export const updateUser = async (req, res) => {
   const { id } = req.user;
   const payload = req.body;
@@ -31,6 +33,8 @@ export const updateUser = async (req, res) => {
   }
 };
 
+
+//tao khach hang tiem nang
 export const createCustomers = async (req, res) => {
   try {
     const { name, phone, email } = req.body;
@@ -46,6 +50,21 @@ export const createCustomers = async (req, res) => {
     return res.status(500).json({
       err: -1,
       msg: "Failed at create customers controller: " + error,
+    });
+  }
+};
+
+
+// xem thong tin khach hang
+export const getCRUDCustomers = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const response = await services.getCustomers(id);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at get customers controller: " + error,
     });
   }
 };
