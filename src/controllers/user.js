@@ -68,3 +68,43 @@ export const getCRUDCustomers = async (req, res) => {
     });
   }
 };
+
+
+// xoa thong tin khach hang
+export const handleDeleteCustomers = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      return res.status(200).json({
+        err:1,
+        msg: 'missing required parameters!'
+      })
+    }
+    const response = await services.deleteCustomers(req.body.id);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at delete customers controller: " + error,
+    });
+  }
+};
+
+
+// sua thong tin khach hang
+export const handleEditCustomers = async (req, res) => {
+  const payload = req.body;
+  try {
+    if (!payload)
+      return res.status(400).json({
+        err: 1,
+        msg: "khoong co payload",
+      });
+    const response = await services.updateCustomers(payload, );
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at handleEditCustomers controller: " + error,
+    });
+  }
+};

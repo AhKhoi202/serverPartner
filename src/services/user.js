@@ -73,3 +73,46 @@ export const getCustomers = (userId) =>
       reject(error);
     }
   });
+
+// xoa thong tin khach hang
+export const deleteCustomers = (id) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Customer.findOne({
+        where: { id },
+      });
+      if (!response) {
+        resolve({
+          err: 2,
+          msg: "The costumer isn't exist",
+          response,
+        });
+      }
+      if (response) {
+        await response.destroy();
+        resolve({
+          err: 0,
+          msg: "The costumer is delete",
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+// sua thong tin khach hang
+  export const updateCustomers = (payload,) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Customer.update(payload, {
+        where: { id: payload.id },
+        raw: true,
+      });
+      resolve({
+        err: response[0] > 0 ? 0 : 1,
+        msg: response[0] > 0 ? "Update" : "Failed to update user services",
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
