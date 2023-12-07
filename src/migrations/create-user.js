@@ -23,6 +23,10 @@ module.exports = {
       address: {
         type: Sequelize.STRING
       },
+      
+      roleId: {
+        type: Sequelize.STRING
+      },
       career: {
         type: Sequelize.STRING
       },

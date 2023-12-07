@@ -11,7 +11,6 @@ router.use(verifyToken)
 router.get('/get-current', userController.getCurrent)
 router.put('/', userController.updateUser)
 router.post('/new-customers', userController.createCustomers)
-
 router.get('/get-customers', userController.getCRUDCustomers)
 
 
