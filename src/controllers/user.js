@@ -55,11 +55,35 @@ export const createCustomers = async (req, res) => {
 };
 
 
-// xem thong tin khach hang
+// xem thong tin khach hang da nhap
 export const getCRUDCustomers = async (req, res) => {
   const { id } = req.user;
   try {
     const response = await services.getCustomers(id);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at get customers controller: " + error,
+    });
+  }
+};
+// admin xem thong tin tat ca khach hang 
+export const getAllCustomers = async (req, res) => {
+  try {
+    const response = await services.getCustomersAdmin();
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at get customers controller: " + error,
+    });
+  }
+};
+// admin xem thong tin tat ca nguoi dung 
+export const getAllUser = async (req, res) => {
+  try {
+    const response = await services.getUser();
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({

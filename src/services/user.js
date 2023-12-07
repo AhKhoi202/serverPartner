@@ -56,12 +56,29 @@ export const createCustomersService = (body, userId) =>
     }
   });
 
-// hien thi thong tin khach hang
+// hien thi thong tin khach hang cho tung partner
 export const getCustomers = (userId) =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await db.Customer.findAll({
         where: { userId },
+        raw: true,
+      });
+      resolve({
+        err: response ? 0 : 1,
+        msg: response ? "Get customers ok" : "Failed to get customers .",
+        response,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+// hien thi thong tin tat ca cac khach hang 
+export const getCustomersAdmin = () =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Customer.findAll({
         raw: true,
       });
       resolve({
@@ -116,3 +133,20 @@ export const deleteCustomers = (id) =>
       reject(error);
     }
   });
+
+  // hien thi thong tin tat ca cac người dùng 
+export const getUser = () =>
+new Promise(async (resolve, reject) => {
+  try {
+    const response = await db.User.findAll({
+      raw: true,
+    });
+    resolve({
+      err: response ? 0 : 1,
+      msg: response ? "Get user ok" : "Failed to get user services .",
+      response,
+    });
+  } catch (error) {
+    reject(error);
+  }
+});
