@@ -7,7 +7,7 @@ const router = express.Router()
 router.put('/edit-customer', userController.handleEditCustomers)
 router.delete('/delete-customer', userController.handleDeleteCustomers)
 router.get('/get-Allcustomers', userController.getAllCustomers)
-router.get('/get-user', userController.getAllUser)
+router.get('/get-users', userController.getAllUser)
 
 router.use(verifyToken)
 router.get('/get-current', userController.getCurrent)
