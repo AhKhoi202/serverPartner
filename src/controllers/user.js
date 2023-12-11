@@ -33,7 +33,6 @@ export const updateUser = async (req, res) => {
   }
 };
 
-
 //tao khach hang tiem nang
 export const createCustomers = async (req, res) => {
   try {
@@ -54,7 +53,6 @@ export const createCustomers = async (req, res) => {
   }
 };
 
-
 // xem thong tin khach hang da nhap
 export const getCRUDCustomers = async (req, res) => {
   const { id } = req.user;
@@ -68,7 +66,7 @@ export const getCRUDCustomers = async (req, res) => {
     });
   }
 };
-// admin xem thong tin tat ca khach hang 
+// admin xem thong tin tat ca khach hang
 export const getAllCustomers = async (req, res) => {
   try {
     const response = await services.getCustomersAdmin();
@@ -80,7 +78,7 @@ export const getAllCustomers = async (req, res) => {
     });
   }
 };
-// admin xem thong tin tat ca nguoi dung 
+// admin xem thong tin tat ca nguoi dung
 export const getAllUser = async (req, res) => {
   try {
     const response = await services.getUser();
@@ -93,15 +91,14 @@ export const getAllUser = async (req, res) => {
   }
 };
 
-
 // xoa thong tin khach hang
 export const handleDeleteCustomers = async (req, res) => {
   try {
     if (!req.body.id) {
       return res.status(200).json({
-        err:1,
-        msg: 'missing required parameters!'
-      })
+        err: 1,
+        msg: "missing required parameters!",
+      });
     }
     const response = await services.deleteCustomers(req.body.id);
     return res.status(200).json(response);
@@ -113,7 +110,6 @@ export const handleDeleteCustomers = async (req, res) => {
   }
 };
 
-
 // sua thong tin khach hang
 export const handleEditCustomers = async (req, res) => {
   const payload = req.body;
@@ -123,7 +119,7 @@ export const handleEditCustomers = async (req, res) => {
         err: 1,
         msg: "khoong co payload",
       });
-    const response = await services.updateCustomers(payload, );
+    const response = await services.updateCustomers(payload);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({

@@ -74,22 +74,29 @@ export const getCustomers = (userId) =>
     }
   });
 
-// hien thi thong tin tat ca cac khach hang 
-export const getCustomersAdmin = () =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const response = await db.Customer.findAll({
-        raw: true,
-      });
-      resolve({
-        err: response ? 0 : 1,
-        msg: response ? "Get customers ok" : "Failed to get customers .",
-        response,
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
+// hien thi thong tin tat ca cac khach hang
+export const getCustomersAdmin = async () => {
+  try {
+    const response = await db.Customer.findAll({
+      raw: false,
+      include: [
+        {
+          model: db.User,
+          as: "user", // Phải giống trong thuộc tính as của Customer model
+          nest: true, // Biến nó thành object
+        },
+      ],
+    });
+
+    return {
+      err: response ? 0 : 1,
+      msg: response ? "Get customers ok" : "Failed to get customers.",
+      response,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
 
 // xoa thong tin khach hang
 export const deleteCustomers = (id) =>
@@ -118,7 +125,7 @@ export const deleteCustomers = (id) =>
   });
 
 // sua thong tin khach hang
-  export const updateCustomers = (payload,) =>
+export const updateCustomers = (payload) =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await db.Customer.update(payload, {
@@ -134,19 +141,19 @@ export const deleteCustomers = (id) =>
     }
   });
 
-  // hien thi thong tin tat ca cac người dùng 
+// hien thi thong tin tat ca cac người dùng
 export const getUser = () =>
-new Promise(async (resolve, reject) => {
-  try {
-    const response = await db.User.findAll({
-      raw: true,
-    });
-    resolve({
-      err: response ? 0 : 1,
-      msg: response ? "Get user ok" : "Failed to get user services .",
-      response,
-    });
-  } catch (error) {
-    reject(error);
-  }
-});
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.User.findAll({
+        raw: true,
+      });
+      resolve({
+        err: response ? 0 : 1,
+        msg: response ? "Get user ok" : "Failed to get user services .",
+        response,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
