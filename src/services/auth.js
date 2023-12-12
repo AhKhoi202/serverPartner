@@ -15,6 +15,7 @@ export const registerService = async ({
   email,
   address,
   career,
+  roleId,
 }) => {
   try {
     const response = await db.User.findOrCreate({
@@ -26,6 +27,7 @@ export const registerService = async ({
         email,
         address,
         career,
+        roleId:'r2',
         id: v4(),
       },
     });

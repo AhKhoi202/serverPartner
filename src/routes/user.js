@@ -5,9 +5,10 @@ import * as userController from "../controllers/user";
 const router = express.Router();
 
 router.put("/edit-customer", userController.handleEditCustomers);
+router.put("/edit-user", userController.handleEditUsers);
 router.delete("/delete-customer", userController.handleDeleteCustomers);
 router.get("/get-Allcustomers", userController.getAllCustomers);
-router.get("/get-users", userController.getAllUser);
+router.get("/get-Allusers", userController.getAllUser);
 
 router.use(verifyToken);
 router.get("/get-current", userController.getCurrent);

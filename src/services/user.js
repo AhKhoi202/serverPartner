@@ -74,30 +74,6 @@ export const getCustomers = (userId) =>
     }
   });
 
-// hien thi thong tin tat ca cac khach hang
-export const getCustomersAdmin = async () => {
-  try {
-    const response = await db.Customer.findAll({
-      raw: false,
-      include: [
-        {
-          model: db.User,
-          as: "user", // Phải giống trong thuộc tính as của Customer model
-          nest: true, // Biến nó thành object
-        },
-      ],
-    });
-
-    return {
-      err: response ? 0 : 1,
-      msg: response ? "Get customers ok" : "Failed to get customers.",
-      response,
-    };
-  } catch (error) {
-    throw error;
-  }
-};
-
 // xoa thong tin khach hang
 export const deleteCustomers = (id) =>
   new Promise(async (resolve, reject) => {
@@ -141,17 +117,66 @@ export const updateCustomers = (payload) =>
     }
   });
 
+// hien thi thong tin tat ca cac khach hang
+export const getCustomersAdmin = async () => {
+  try {
+    const response = await db.Customer.findAll({
+      raw: false,
+      include: [
+        {
+          model: db.User,
+          as: "user", // Phải giống trong thuộc tính as của Customer model
+          nest: true, // Biến nó thành object
+        },
+      ],
+    });
+
+    return {
+      err: response ? 0 : 1,
+      msg: response ? "Get customers ok" : "Failed to get customers.",
+      response,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 // hien thi thong tin tat ca cac người dùng
 export const getUser = () =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await db.User.findAll({
         raw: true,
+        include: [
+          {
+            model: db.Role,
+            as: "role", // Phải giống trong thuộc tính as của User model
+            nest: true, // Biến nó thành object
+          },
+        ],
       });
       resolve({
         err: response ? 0 : 1,
         msg: response ? "Get user ok" : "Failed to get user services .",
         response,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+
+// admin sua thong tin nguoi dung
+export const updateUsers = (payload) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.User.update(payload, {
+        where: { id: payload.id },
+        raw: true,
+      });
+      resolve({
+        err: response[0] > 0 ? 0 : 1,
+        msg: response[0] > 0 ? "Update" : "Failed to update user services",
       });
     } catch (error) {
       reject(error);
