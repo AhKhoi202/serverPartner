@@ -2,6 +2,7 @@ import db from "../models";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v4 } from "uuid";
+import {sendSimpleEmail} from "./emailServices";
 
 require("dotenv").config();
 
@@ -18,6 +19,8 @@ export const registerService = async ({
   roleId,
 }) => {
   try {
+
+    await sendSimpleEmail(email )
     const response = await db.User.findOrCreate({
       where: { phone },
       defaults: {
@@ -27,7 +30,7 @@ export const registerService = async ({
         email,
         address,
         career,
-        roleId:'r2',
+        roleId: "r2",
         id: v4(),
       },
     });
