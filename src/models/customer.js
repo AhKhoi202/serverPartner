@@ -11,19 +11,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Customer.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id', as: 'user' })
+      Customer.belongsTo(models.User, {
+        foreignKey: "userId",
+        targetKey: "id",
+        as: "user",
+      });
     }
   }
-  Customer.init({
-    name: DataTypes.STRING,
-    phone: DataTypes.STRING,
-    email: DataTypes.STRING,
-    // career: DataTypes.STRING,
-    note: DataTypes.STRING,
-    userId: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Customer',
-  });
+  Customer.init(
+    {
+      name: DataTypes.STRING,
+      phone: DataTypes.STRING,
+      email: DataTypes.STRING,
+      note: DataTypes.STRING,
+      userId: DataTypes.STRING,
+      estimatedCosts: DataTypes.FLOAT,
+      companyName: DataTypes.STRING, // Thêm dòng này
+    },
+    {
+      sequelize,
+      modelName: "Customer",
+    }
+  );
+
   return Customer;
 };
