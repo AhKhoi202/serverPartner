@@ -105,6 +105,32 @@ export const handleDeleteCustomers = async (req, res) => {
     });
   }
 };
+// xoa thong tin nguoi dung
+export const handleDeleteUsers = async (req, res) => {
+  try {
+    if (!req.body.id) {
+      return res.status(200).json({
+        err: 1,
+        msg: "missing required parameters!",
+      });
+    }
+
+    // const customers = await services.findCustomersByUserId(req.body.id);
+    // if (customers.length > 0) {
+    //   return res.status(400).json({
+    //     err: 2,
+    //     msg: "Không thể xóa người dùng vì họ đang được tham chiếu trong bảng Customers.",
+    //   });
+    // }
+    const response = await services.deleteUsers(req.body.id);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at delete user controller: " + error,
+    });
+  }
+};
 // sua thong tin khach hang
 export const handleEditCustomers = async (req, res) => {
   const payload = req.body;

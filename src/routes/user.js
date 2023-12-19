@@ -7,6 +7,7 @@ const router = express.Router();
 router.put("/edit-customer", userController.handleEditCustomers);
 router.put("/edit-user", userController.handleEditUsers);
 router.delete("/delete-customer", userController.handleDeleteCustomers);
+router.delete("/delete-user", userController.handleDeleteUsers);
 router.get("/get-Allcustomers", userController.getAllCustomers);
 router.get("/get-Allusers", userController.getAllUser);
 

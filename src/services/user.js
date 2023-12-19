@@ -84,7 +84,7 @@ export const deleteCustomers = (id) =>
       if (!response) {
         resolve({
           err: 2,
-          msg: "The costumer isn't exist",
+          msg: "The customer isn't exist",
           response,
         });
       }
@@ -92,7 +92,40 @@ export const deleteCustomers = (id) =>
         await response.destroy();
         resolve({
           err: 0,
-          msg: "The costumer is delete",
+          msg: "The customer is delete",
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+// xoa thong tin nguoi dung
+export const deleteUsers = (id) =>
+  new Promise(async (resolve, reject) => {
+    try {
+       if (getOne.id === id) {
+        resolve({
+          err: 3,
+          msg: "Admin không thể tự xóa chính mình",
+        });
+        return;
+      }
+      const response = await db.User.findOne({
+        where: { id },
+      });
+      if (!response) {
+        resolve({
+          err: 2,
+          msg: "The user isn't exist",
+          response,
+        });
+      }
+      if (response) {
+        await response.destroy();
+        resolve({
+          err: 0,
+          msg: "The user is delete",
         });
       }
     } catch (error) {
