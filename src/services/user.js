@@ -100,17 +100,11 @@ export const deleteCustomers = (id) =>
     }
   });
 
+
 // xoa thong tin nguoi dung
 export const deleteUsers = (id) =>
   new Promise(async (resolve, reject) => {
     try {
-       if (getOne.id === id) {
-        resolve({
-          err: 3,
-          msg: "Admin không thể tự xóa chính mình",
-        });
-        return;
-      }
       const response = await db.User.findOne({
         where: { id },
       });
@@ -118,6 +112,16 @@ export const deleteUsers = (id) =>
         resolve({
           err: 2,
           msg: "The user isn't exist",
+          response,
+        });
+      }
+      const count = await db.Customer.count({
+        where: { userId: id },
+      });
+      if (count > 0) {
+        resolve({
+          err: 3,
+          msg: "Cannot delete user as it is referenced in Customers table.",
           response,
         });
       }

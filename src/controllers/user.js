@@ -114,14 +114,6 @@ export const handleDeleteUsers = async (req, res) => {
         msg: "missing required parameters!",
       });
     }
-
-    // const customers = await services.findCustomersByUserId(req.body.id);
-    // if (customers.length > 0) {
-    //   return res.status(400).json({
-    //     err: 2,
-    //     msg: "Không thể xóa người dùng vì họ đang được tham chiếu trong bảng Customers.",
-    //   });
-    // }
     const response = await services.deleteUsers(req.body.id);
     return res.status(200).json(response);
   } catch (error) {
