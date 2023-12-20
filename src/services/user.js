@@ -100,7 +100,6 @@ export const deleteCustomers = (id) =>
     }
   });
 
-
 // xoa thong tin nguoi dung
 export const deleteUsers = (id) =>
   new Promise(async (resolve, reject) => {
@@ -121,8 +120,7 @@ export const deleteUsers = (id) =>
       if (count > 0) {
         resolve({
           err: 3,
-          msg: "Cannot delete user as it is referenced in Customers table.",
-          response,
+          msg: "Không thể xóa người dùng vì người dùng có thông tin khách hàng.",
         });
       }
       if (response) {
@@ -202,11 +200,20 @@ export const getUser = () =>
     }
   });
 
-
 // admin sua thong tin nguoi dung
 export const updateUsers = (payload) =>
   new Promise(async (resolve, reject) => {
     try {
+      if (payload["role.name"]) {
+        const roleId = await findRoleIdByName(payload["role.name"]);
+        if (roleId) {
+          payload.roleId = roleId;
+        } else {
+          // Xử lý trường hợp không tìm thấy Role
+          throw new Error("Role not found");
+        }
+      }
+
       const response = await db.User.update(payload, {
         where: { id: payload.id },
         raw: true,
@@ -219,3 +226,16 @@ export const updateUsers = (payload) =>
       reject(error);
     }
   });
+
+async function findRoleIdByName(roleName) {
+  try {
+    const role = await db.Role.findOne({
+      where: { name: roleName },
+    });
+    return role ? role.id : null;
+  } catch (error) {
+    // Xử lý lỗi ở đây
+    console.error("Error in findRoleIdByName:", error);
+    throw error;
+  }
+}

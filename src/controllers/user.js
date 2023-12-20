@@ -114,6 +114,8 @@ export const handleDeleteUsers = async (req, res) => {
         msg: "missing required parameters!",
       });
     }
+    
+
     const response = await services.deleteUsers(req.body.id);
     return res.status(200).json(response);
   } catch (error) {
