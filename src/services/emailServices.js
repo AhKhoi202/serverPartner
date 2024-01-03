@@ -36,3 +36,37 @@ export const sendSimpleEmail = async (reciverEmail) => {
     `, // html body
   });
 };
+
+export const ForgotPassword = async (email,token) => {
+   var transporter = nodemailer.createTransport({
+     service: "gmail",
+     auth: {
+       user: process.env.EMAIL,
+       pass: process.env.EMAIL_PASSWORD,
+     },
+   });
+  var mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: "Reset Password Link",
+    html: `<html>
+      <head>
+        <style>
+      /* Thêm bất kỳ kiểu dáng bổ sung nếu cần thiết */
+    </style>
+  </head>
+  <body>
+  Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. 
+  <a href=${process.env.CLIENT_URL}reset-password/${token} >Click here</a>
+  </body>
+  </html>,
+  `,
+  };
+   transporter.sendMail(mailOptions, function (error, info) {
+     if (error) {
+       console.log(error);
+     } else {
+       return res.send({ Status: "Success" });
+     }
+   });
+};

@@ -1,4 +1,7 @@
 import * as services from "../services/user";
+import db from "../models";
+import jwt from "jsonwebtoken";
+import { ForgotPassword } from "../services/emailServices";
 
 export const getCurrent = async (req, res) => {
   const { id } = req.user;
@@ -114,7 +117,6 @@ export const handleDeleteUsers = async (req, res) => {
         msg: "missing required parameters!",
       });
     }
-    
 
     const response = await services.deleteUsers(req.body.id);
     return res.status(200).json(response);
@@ -160,4 +162,26 @@ export const handleEditUsers = async (req, res) => {
       msg: "Failed at handleEditUsers controller: " + error,
     });
   }
+};
+
+//forgotpassword
+export const forgotPassword = async (req, res) => {
+  const { email } = req.query;
+   try {
+     if (!email) throw new Error("Missing email");
+     const user = await db.User.findOne({ where: { email } });
+     if (!user) throw new Error("User not found");
+     const token = jwt.sign({ id: user.id }, "jwt_secret_key", {
+       expiresIn: "15m",
+     });
+     ForgotPassword(email, token);
+    return res.status(200).json('gửi mail thành công');
+
+   } catch (error) {
+     return res.status(500).json({
+       err: -1,
+       msg: "Failed at forgotPassword controller: " + error,
+     });
+   }
+
 };
