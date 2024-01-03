@@ -175,7 +175,10 @@ export const forgotPassword = async (req, res) => {
        expiresIn: "15m",
      });
      ForgotPassword(email, token);
-    return res.status(200).json('gửi mail thành công');
+     return res.status(200).json({
+       success: true
+       
+     });
 
    } catch (error) {
      return res.status(500).json({
