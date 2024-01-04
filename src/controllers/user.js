@@ -168,14 +168,10 @@ export const handleEditUsers = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   const { email } = req.query;
   try {
-    if (!email)
-      return res.status(400).json({
-        err: 1,
-        msg: "Thiếu email",
-      });
+   
     const user = await db.User.findOne({ where: { email } });
     if (!user)
-      return res.status(400).json({
+      return res.status(200).json({
         err: 1,
         msg: "Không tồn tại người dùng có email trên.",
       });
@@ -184,7 +180,7 @@ export const forgotPassword = async (req, res) => {
     });
     ForgotPassword(email, token);
     return res.status(200).json({
-      success: true,
+      err:0
     });
   } catch (error) {
     return res.status(500).json({
