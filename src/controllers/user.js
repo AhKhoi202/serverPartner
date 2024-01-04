@@ -167,24 +167,29 @@ export const handleEditUsers = async (req, res) => {
 //forgotpassword
 export const forgotPassword = async (req, res) => {
   const { email } = req.query;
-   try {
-     if (!email) throw new Error("Missing email");
-     const user = await db.User.findOne({ where: { email } });
-     if (!user) throw new Error("User not found");
-     const token = jwt.sign({ id: user.id }, "jwt_secret_key", {
-       expiresIn: "15m",
-     });
-     ForgotPassword(email, token);
-     return res.status(200).json({
-       success: true
-       
-     });
-
-   } catch (error) {
-     return res.status(500).json({
-       err: -1,
-       msg: "Failed at forgotPassword controller: " + error,
-     });
-   }
-
+  try {
+    if (!email)
+      return res.status(400).json({
+        err: 1,
+        msg: "Thiếu email",
+      });
+    const user = await db.User.findOne({ where: { email } });
+    if (!user)
+      return res.status(400).json({
+        err: 1,
+        msg: "Không tồn tại người dùng có email trên.",
+      });
+    const token = jwt.sign({ id: user.id }, "jwt_secret_key", {
+      expiresIn: "15m",
+    });
+    ForgotPassword(email, token);
+    return res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at forgotPassword controller: " + error,
+    });
+  }
 };
