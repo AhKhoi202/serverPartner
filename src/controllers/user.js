@@ -210,7 +210,7 @@ export const resetPassword = async (req, res) => {
       { where: { id: decoded.id } }
     );
 
-    res.json({ message: user.phone });
+    res.json({ message: "Đặt lại mật khẩu thành công." });
   } catch (error) {
     if (error.name === "JsonWebTokenError") {
       return res.status(401).json({ message: "Token không hợp lệ." });
