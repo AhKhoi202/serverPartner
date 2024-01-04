@@ -1,4 +1,5 @@
 import * as services from "../services/user";
+import bcrypt from "bcryptjs";
 import db from "../models";
 import jwt from "jsonwebtoken";
 import { ForgotPassword } from "../services/emailServices";
@@ -178,7 +179,7 @@ export const forgotPassword = async (req, res) => {
     const token = jwt.sign({ id: user.id }, "jwt_secret_key", {
       expiresIn: "15m",
     });
-    ForgotPassword(email, token);
+    ForgotPassword(id, email, token);
     return res.status(200).json({
       err:0
     });
@@ -188,4 +189,22 @@ export const forgotPassword = async (req, res) => {
       msg: "Failed at forgotPassword controller: " + error,
     });
   }
+};
+
+export const resetPassword = async (req, res) => {
+   const { token } = req.params;
+   const { id,password } = req.body;
+
+   jwt.verify(token, "jwt_secret_key", (err, decoded) => {
+     if (err) {
+       return res.json({ Status: "Error with token" });
+     } else {
+       bcrypt
+         .hash(password, 12)
+         .then((hash) => {
+           db.User.updateUser({ where: {id} },  password)
+             .then((u) => res.send({ Status: "Success" }))
+         })
+     }
+   });
 };

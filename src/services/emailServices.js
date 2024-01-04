@@ -37,14 +37,14 @@ export const sendSimpleEmail = async (reciverEmail) => {
   });
 };
 
-export const ForgotPassword = async (email,token) => {
-   var transporter = nodemailer.createTransport({
-     service: "gmail",
-     auth: {
-       user: process.env.EMAIL,
-       pass: process.env.EMAIL_PASSWORD,
-     },
-   });
+export const ForgotPassword = async (id, email, token) => {
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
   var mailOptions = {
     from: process.env.EMAIL,
     to: email,
@@ -57,16 +57,16 @@ export const ForgotPassword = async (email,token) => {
   </head>
   <body>
   Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. 
-  <a href=${process.env.CLIENT_URL}reset-password/${token} >Click here</a>
+  <a href=${process.env.CLIENT_URL}reset-password/${id}/${token} >Click here</a>
   </body>
   </html>,
   `,
   };
-   transporter.sendMail(mailOptions, function (error, info) {
-     if (error) {
-       console.log(error);
-     } else {
-       return res.send({ Status: "Success" });
-     }
-   });
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      return res.send({ Status: "Success" });
+    }
+  });
 };

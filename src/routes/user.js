@@ -4,6 +4,7 @@ import * as userController from "../controllers/user";
 
 const router = express.Router();
 
+router.post("/reset-password/:token", userController.resetPassword);
 router.get("/forgot-password", userController.forgotPassword);
 router.put("/edit-customer", userController.handleEditCustomers);
 router.put("/edit-user", userController.handleEditUsers);
