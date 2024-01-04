@@ -16,10 +16,12 @@ export const registerService = async ({
   email,
   address,
   career,
-  roleId,
 }) => {
   try {
-
+    const emailExists = await db.User.findOne({ where: { email } });
+    if (emailExists) {
+      return { err: 1, msg: "Email đã được sử dụng." };
+    }
     await sendSimpleEmail(email )
     const response = await db.User.findOrCreate({
       where: { phone },
