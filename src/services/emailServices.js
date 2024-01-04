@@ -37,7 +37,7 @@ export const sendSimpleEmail = async (reciverEmail) => {
   });
 };
 
-export const ForgotPassword = async (id, email, token) => {
+export const ForgotPassword = async ( email, token) => {
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -57,7 +57,7 @@ export const ForgotPassword = async (id, email, token) => {
   </head>
   <body>
   Xin vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.Link này sẽ hết hạn sau 15 phút kể từ bây giờ. 
-  <a href=${process.env.CLIENT_URL}reset-password/${id}/${token} >Click here</a>
+  <a href=${process.env.CLIENT_URL}reset-password/${token} >Click here</a>
   </body>
   </html>,
   `,

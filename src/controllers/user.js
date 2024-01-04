@@ -169,7 +169,6 @@ export const handleEditUsers = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   const { email } = req.query;
   try {
-   
     const user = await db.User.findOne({ where: { email } });
     if (!user)
       return res.status(200).json({
@@ -179,9 +178,9 @@ export const forgotPassword = async (req, res) => {
     const token = jwt.sign({ id: user.id }, "jwt_secret_key", {
       expiresIn: "15m",
     });
-    ForgotPassword(id, email, token);
+    ForgotPassword( email, token);
     return res.status(200).json({
-      err:0
+      err: 0,
     });
   } catch (error) {
     return res.status(500).json({
@@ -192,19 +191,31 @@ export const forgotPassword = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => {
-   const { token } = req.params;
-   const { id,password } = req.body;
+  const { token } = req.params;
+  const { password } = req.body;
 
-   jwt.verify(token, "jwt_secret_key", (err, decoded) => {
-     if (err) {
-       return res.json({ Status: "Error with token" });
-     } else {
-       bcrypt
-         .hash(password, 12)
-         .then((hash) => {
-           db.User.updateUser({ where: {id} },  password)
-             .then((u) => res.send({ Status: "Success" }))
-         })
-     }
-   });
+  try {
+    // Xác thực token
+    const decoded = jwt.verify(token, "jwt_secret_key");
+    // Tìm kiếm người dùng bằng ID từ token
+    const user = await db.User.findOne({ where: { id: decoded.id } });
+    if (!user) {
+      return res.status(404).json({ message: "Người dùng không tồn tại." });
+    }
+    // Băm mật khẩu mới
+    const hashedPassword = await bcrypt.hash(password, 12);
+    // Cập nhật mật khẩu trong cơ sở dữ liệu
+    await db.User.update(
+      { password: hashedPassword },
+      { where: { id: decoded.id } }
+    );
+
+    res.json({ message: user.phone });
+  } catch (error) {
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ message: "Token không hợp lệ." });
+    }
+    console.error(error);
+    res.status(500).json({ message: "Lỗi máy chủ." });
+  }
 };
