@@ -16,6 +16,7 @@ export const getCurrent = async (req, res) => {
     });
   }
 };
+
 // sua thong tin nguoi dung
 export const updateUser = async (req, res) => {
   const { id } = req.user;

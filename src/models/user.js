@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
         as: "role",
       });
+      User.belongsTo(models.Role, {
+        foreignKey: "referral_code",
+        targetKey: "id",
+        as: "user",
+      });  
     }
   }
   User.init(
@@ -20,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       career: DataTypes.STRING,
       roleId: DataTypes.STRING,
       gender: DataTypes.BOOLEAN,
+      referral_code: DataTypes.STRING,
     },
     {
       sequelize,

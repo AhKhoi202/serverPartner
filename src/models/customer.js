@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       note: DataTypes.STRING,
       userId: DataTypes.STRING,
       estimatedCosts: DataTypes.FLOAT,
-      companyName: DataTypes.STRING, // Thêm dòng này
+      companyName: DataTypes.STRING, 
     },
     {
       sequelize,
