@@ -21,12 +21,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       description: DataTypes.TEXT,
-      expected_revenue: DataTypes.FLOAT,
-      actual_revenue: DataTypes.FLOAT,
-      start_date: DataTypes.DATE,
-      end_date: DataTypes.DATE,
+      expectedRevenue: DataTypes.FLOAT,
+      actualRevenue: DataTypes.FLOAT,
+      startDate: DataTypes.DATE,
+      endDate: DataTypes.DATE,
       userId: DataTypes.STRING,
-      customer_id: DataTypes.STRING,
+      customerId: DataTypes.STRING,
       status: DataTypes.STRING,
     },
     {

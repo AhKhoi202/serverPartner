@@ -1,11 +1,10 @@
 import * as services from "../services/project";
+import db from "../models";
+
 
 export const createProject = async (req, res) => {
   try {
-    const { name } = req.body;
-    const { userId } = req.user;
-    const { customerId } = req.params;
-
+    const { name, customerId, userId } = req.body;
     if (!userId || !name || !customerId)
       return res.status(400).json({
         err: 1,
@@ -13,16 +12,14 @@ export const createProject = async (req, res) => {
       });
 
     const response = await services.createProjectService(
-      req.body,
-      userId,
-      customerId
+      req.body
     );
 
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({
       err: -1,
-      msg: "Failed at create project controller: " + error,
+      msg: "Failed at create project controller: " + error ,
     });
   }
 };

@@ -2,14 +2,13 @@ import db from "../models";
 import { v4 as generateId } from "uuid";
 
 //tạo project
-export const createProjectService = (body, userId, customerId) =>
+export const createProjectService = (body) =>
   new Promise(async (resolve, reject) => {
     try {
       await db.Project.create({
         ...body,
         id: generateId(),
-        userId,
-        customerId,
+        
       });
       resolve({
         err: 0,

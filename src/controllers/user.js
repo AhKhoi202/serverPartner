@@ -40,13 +40,14 @@ export const updateUser = async (req, res) => {
 export const createCustomers = async (req, res) => {
   try {
     const { name, phone, email } = req.body;
-    const { id } = req.user;
-    if (!id || !name || !phone || !email)
+    const { userId } = req.user;
+
+    if (!userId || !name || !phone || !email)
       return res.status(400).json({
         err: 1,
         msg: "missing input",
       });
-    const response = await services.createCustomersService(req.body, id);
+    const response = await services.createCustomersService(req.body, userId);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({
