@@ -38,7 +38,7 @@ export const getCustomerById = async (req, res) => {
 export const getProjectsUser = async (req, res) => {
   const { id } = req.user;
   try {
-    const response = await services.getProjectsByUserId(id);
+    const response = await services.getProjects({ userId:id } );
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({
@@ -50,7 +50,7 @@ export const getProjectsUser = async (req, res) => {
 
 export const getAllProject = async (req, res) => {
   try {
-    const response = await services.getAllProjects();
+    const response = await services.getProjects();
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({

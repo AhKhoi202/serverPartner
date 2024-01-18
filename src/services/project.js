@@ -61,14 +61,34 @@ export const getProjectsByUserId = (userId) =>
     }
   });
 
-export const getAllProjects = async () => {
+export const getProjects = async (...args) => {
+  // Tạo object chứa các điều kiện lọc dựa trên tham số đầu vào
+  const whereCondition = {};
+
+ if (args.length > 0) {
+   // Xử lý các đối số đặc biệt như userId và projectId
+       console.log(args);
+
+   args.forEach((arg) => {
+     if (arg.userId) {
+       whereCondition["userId"] = arg.userId;
+     }
+     if (arg.projectId) {
+       whereCondition["id"] = arg.projectId;
+     }
+     // Các điều kiện lọc khác có thể được thêm vào tại đây
+   });
+ }
+
   const response = await db.Project.findAll({
+    where: whereCondition,
     raw: false,
     include: [
       {
         model: db.User,
-        as: "user", 
-        nest: true, 
+        as: "user",
+        attributes: { exclude: ["password"] },
+        nest: true,
       },
       {
         model: db.Customer,
@@ -76,6 +96,7 @@ export const getAllProjects = async () => {
         nest: true, // Biến nó thành object
       },
     ],
+    ...args,
   });
   return {
     err: response ? 0 : 1,

@@ -161,6 +161,7 @@ export const getCustomersAdmin = async () => {
         {
           model: db.User,
           as: "user", // Phải giống trong thuộc tính as của Customer model
+          attributes: { exclude: ["password"] },
           nest: true, // Biến nó thành object
         },
       ],
