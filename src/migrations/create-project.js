@@ -37,7 +37,6 @@ module.exports = {
       },
       status: {
         type: Sequelize.STRING,
-
         defaultValue: "Chưa giải quyết",
       },
       createdAt: {

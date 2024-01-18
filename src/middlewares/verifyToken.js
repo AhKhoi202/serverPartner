@@ -1,7 +1,15 @@
 import jwt from "jsonwebtoken";
 const verifyToken = (req, res, next) => {
-  let accessToken = req.headers.authorization?.split(" ")[1];
+  const authorizationHeader = req.headers.authorization;
+  
+  // if (!authorizationHeader) {
+  //   return res.status(401).json({
+  //     err: 1,
+  //     msg: "Missing access token",
+  //   });
+  // }
   // console.log(accessToken);
+  let accessToken = req.headers.authorization?.split(" ")[1];
   if (!accessToken)
     return res.status(401).json({
       err: 1,
