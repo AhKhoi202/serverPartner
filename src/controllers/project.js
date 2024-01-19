@@ -21,9 +21,9 @@ export const createProject = async (req, res) => {
   }
 };
 
+// lay thong tin khách hàng khi tạo dự án
 export const getCustomerById = async (req, res) => {
   const { customerId } = req.params;
-  // console.log(customerId)
   try {
     const response = await services.getCustomerById(customerId);
     return res.status(200).json(response);
@@ -35,10 +35,11 @@ export const getCustomerById = async (req, res) => {
   }
 };
 
+//lấy thông tin dự án theo người dùng
 export const getProjectsUser = async (req, res) => {
   const { id } = req.user;
   try {
-    const response = await services.getProjects({ userId:id } );
+    const response = await services.getProjects({ userId: id });
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({
@@ -48,6 +49,7 @@ export const getProjectsUser = async (req, res) => {
   }
 };
 
+//dự án cho admin
 export const getAllProject = async (req, res) => {
   try {
     const response = await services.getProjects();
@@ -56,6 +58,42 @@ export const getAllProject = async (req, res) => {
     return res.status(500).json({
       err: -1,
       msg: "Failed at get project controller: " + error,
+    });
+  }
+};
+
+// tiến độ theo dự án
+export const getProjectsProgress = async (req, res) => {
+  const { projectId } = req.params;
+  console.log(projectId)
+  try {
+    const response = await services.getProjectsProgress({
+      projectId: projectId,
+    });
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at get project progress controller: " + error,
+    });
+  }
+};
+
+export const updateProjectProgress = async (req, res) => {
+  try {
+    const { projectId, updateDate } = req.body;
+    console.log(req.body);
+    if (!projectId || !updateDate)
+      return res.status(400).json({
+        err: 1,
+        msg: "missing input",
+      });
+    const response = await services.updateProjectProgress(req.body);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at create customers controller: " + error,
     });
   }
 };

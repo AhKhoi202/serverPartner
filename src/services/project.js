@@ -64,7 +64,6 @@ export const getProjectsByUserId = (userId) =>
 export const getProjects = async (...args) => {
   // Tạo object chứa các điều kiện lọc dựa trên tham số đầu vào
   const whereCondition = {};
-
  if (args.length > 0) {
    // Xử lý các đối số đặc biệt như userId và projectId
        console.log(args);
@@ -105,3 +104,39 @@ export const getProjects = async (...args) => {
   };
 };
 
+export const updateProjectProgress = (body) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      await db.ProjectProgress.create({
+        ...body,
+        id: generateId(),
+      });
+      resolve({
+        err: 0,
+        msg: "Create",
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+  export const getProjectsProgress = async (...args) => {
+    const whereCondition = {};
+    if (args.length > 0) {
+      args.forEach((arg) => {
+        if (arg.projectId) {
+          whereCondition["projectId"] = arg.projectId;
+        }
+      });
+    }
+    const response = await db.ProjectProgress.findAll({
+      where: whereCondition,
+      raw: false,
+      ...args,
+    });
+    return {
+      err: response ? 0 : 1,
+      msg: response ? "Get all projects ok" : "Failed to get all projects.",
+      response,
+    };
+  };

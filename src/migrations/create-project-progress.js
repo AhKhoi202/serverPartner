@@ -1,8 +1,8 @@
 "use strict";
-
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("projectStatus", {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("ProjectProgresses", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -12,12 +12,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      status: {
+      progressPercentage: {
+        type: Sequelize.INTEGER,
+      },
+      currentStage: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      description: {
-        type: Sequelize.TEXT,
+      updateDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -29,8 +33,7 @@ module.exports = {
       },
     });
   },
-
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("projecStatus");
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable("ProjectProgresses");
   },
 };
