@@ -2,12 +2,32 @@ import db from "../models";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v4 } from "uuid";
-import {sendSimpleEmail} from "./emailServices";
+import { sendSimpleEmail } from "./emailServices";
 
 require("dotenv").config();
 
 const hashPassword = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(12));
+
+const generateSelfReferralCode = async (input) => {
+  let isUnique = false;
+  let selfReferralCode;
+
+  while (!isUnique) {
+    const salt = bcrypt.genSaltSync();
+    const hash = bcrypt.hashSync(input + Date.now(), salt);
+    selfReferralCode = hash.substring(hash.length - 6).toUpperCase();
+
+    const existingCode = await db.User.findOne({ where: { selfReferralCode } });
+    if (!existingCode) {
+      isUnique = true;
+    } else {
+      input += "a";
+    }
+  }
+
+  return selfReferralCode;
+};
 
 export const registerService = async ({
   phone,
@@ -16,13 +36,15 @@ export const registerService = async ({
   email,
   address,
   career,
+  referralCode,
 }) => {
   try {
     const emailExists = await db.User.findOne({ where: { email } });
     if (emailExists) {
       return { err: 1, msg: "Email đã được sử dụng." };
     }
-    await sendSimpleEmail(email )
+    await sendSimpleEmail(email);
+
     const response = await db.User.findOrCreate({
       where: { phone },
       defaults: {
@@ -32,9 +54,17 @@ export const registerService = async ({
         email,
         address,
         career,
+        referralCode,
         roleId: "r2",
         id: v4(),
       },
+    });
+console.log(response[0].id);
+    const selfReferralCode = await generateSelfReferralCode(email);
+    await db.ReferralCode.create({
+      code: selfReferralCode,
+      userId: response[0].id,
+      id: v4(),
     });
 
     const token =

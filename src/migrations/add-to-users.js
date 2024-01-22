@@ -2,13 +2,13 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // await queryInterface.addColumn("Users", "referral_code", {
-    //   type: Sequelize.STRING,
-    //   allowNull: true,
-    // });
+    await queryInterface.addColumn("Users", "selfReferralCode", {
+      type: Sequelize.STRING,
+      allowNull: true,
+    });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("Users", "referral_code");
+    await queryInterface.removeColumn("Users", "selfReferralCode");
   },
 };

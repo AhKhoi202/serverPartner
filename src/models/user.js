@@ -7,12 +7,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "roleId",
         targetKey: "id",
         as: "role",
-      });
-      User.belongsTo(models.Role, {
-        foreignKey: "referral_code",
-        targetKey: "id",
-        as: "user",
-      });  
+      }); 
+      User.belongsTo(models.ReferralCode, {
+        foreignKey: "referralCode",
+        targetKey: "code",
+        as: "referral",
+      }); 
+      User.belongsTo(models.ReferralCode, {
+        foreignKey: "id",
+        targetKey: "userId",
+        as: "code",
+      }); 
+      
     }
   }
   User.init(
@@ -25,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       career: DataTypes.STRING,
       roleId: DataTypes.STRING,
       gender: DataTypes.BOOLEAN,
-      referral_code: DataTypes.STRING,
+      referralCode: DataTypes.STRING,
     },
     {
       sequelize,

@@ -64,20 +64,20 @@ export const getProjectsByUserId = (userId) =>
 export const getProjects = async (...args) => {
   // Tạo object chứa các điều kiện lọc dựa trên tham số đầu vào
   const whereCondition = {};
- if (args.length > 0) {
-   // Xử lý các đối số đặc biệt như userId và projectId
-       console.log(args);
+  if (args.length > 0) {
+    // Xử lý các đối số đặc biệt như userId và projectId
+    console.log(args);
 
-   args.forEach((arg) => {
-     if (arg.userId) {
-       whereCondition["userId"] = arg.userId;
-     }
-     if (arg.projectId) {
-       whereCondition["id"] = arg.projectId;
-     }
-     // Các điều kiện lọc khác có thể được thêm vào tại đây
-   });
- }
+    args.forEach((arg) => {
+      if (arg.userId) {
+        whereCondition["userId"] = arg.userId;
+      }
+      if (arg.projectId) {
+        whereCondition["id"] = arg.projectId;
+      }
+      // Các điều kiện lọc khác có thể được thêm vào tại đây
+    });
+  }
 
   const response = await db.Project.findAll({
     where: whereCondition,
@@ -120,23 +120,23 @@ export const updateProjectProgress = (body) =>
     }
   });
 
-  export const getProjectsProgress = async (...args) => {
-    const whereCondition = {};
-    if (args.length > 0) {
-      args.forEach((arg) => {
-        if (arg.projectId) {
-          whereCondition["projectId"] = arg.projectId;
-        }
-      });
-    }
-    const response = await db.ProjectProgress.findAll({
-      where: whereCondition,
-      raw: false,
-      ...args,
+export const getProjectsProgress = async (...args) => {
+  const whereCondition = {};
+  if (args.length > 0) {
+    args.forEach((arg) => {
+      if (arg.projectId) {
+        whereCondition["projectId"] = arg.projectId;
+      }
     });
-    return {
-      err: response ? 0 : 1,
-      msg: response ? "Get all projects ok" : "Failed to get all projects.",
-      response,
-    };
+  }
+  const response = await db.ProjectProgress.findAll({
+    where: whereCondition,
+    raw: false,
+    ...args,
+  });
+  return {
+    err: response ? 0 : 1,
+    msg: response ? "Get all projects ok" : "Failed to get all projects.",
+    response,
   };
+};

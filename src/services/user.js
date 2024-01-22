@@ -11,6 +11,13 @@ export const getOne = (id) =>
         attributes: {
           exclude: ["password"],
         },
+        include: [
+          {
+            model: db.ReferralCode,
+            as: "code", // Phải giống trong thuộc tính as của User model
+            nest: true, // Biến nó thành object
+          },
+        ],
       });
       resolve({
         err: response ? 0 : 1,
@@ -183,10 +190,16 @@ export const getUser = () =>
     try {
       const response = await db.User.findAll({
         raw: true,
+        attributes: { exclude: ["password"] },
         include: [
           {
             model: db.Role,
             as: "role", // Phải giống trong thuộc tính as của User model
+            nest: true, // Biến nó thành object
+          },
+          {
+            model: db.ReferralCode,
+            as: "referral", // Phải giống trong thuộc tính as của User model
             nest: true, // Biến nó thành object
           },
         ],
