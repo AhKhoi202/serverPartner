@@ -37,6 +37,7 @@ export const getCustomerById = async (id) => {
   };
 };
 
+// lấy thông tin dự án theo tưng partner
 export const getProjectsByUserId = (userId) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -61,6 +62,7 @@ export const getProjectsByUserId = (userId) =>
     }
   });
 
+// lấy thông tin dự án tùy theo đầu vào
 export const getProjects = async (...args) => {
   // Tạo object chứa các điều kiện lọc dựa trên tham số đầu vào
   const whereCondition = {};
@@ -104,6 +106,7 @@ export const getProjects = async (...args) => {
   };
 };
 
+//thêm tiến độ dự án
 export const updateProjectProgress = (body) =>
   new Promise(async (resolve, reject) => {
     try {
@@ -120,6 +123,7 @@ export const updateProjectProgress = (body) =>
     }
   });
 
+// lấy tiến độ dự án
 export const getProjectsProgress = async (...args) => {
   const whereCondition = {};
   if (args.length > 0) {
@@ -139,4 +143,20 @@ export const getProjectsProgress = async (...args) => {
     msg: response ? "Get all projects ok" : "Failed to get all projects.",
     response,
   };
+};
+
+export const updateProject = async (payload) => {
+  try {
+    const response = await db.Project.update(payload, {
+      where: { id: payload.id },
+      raw: true,
+    });
+
+    return {
+      err: response[0] > 0 ? 0 : 1,
+      msg: response[0] > 0 ? "Update" : "Failed to update project",
+    };
+  } catch (error) {
+    throw error;
+  }
 };
