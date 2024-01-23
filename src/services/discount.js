@@ -1,41 +1,53 @@
 const db = require("../models");
+import { v4 as generateId } from "uuid";
 
 export const findReferrer = async (referralCode) => {
-  var referralCode = "SANGB6";
-  if (!referralCode) return null;
-
   try {
-    const referrer = await db.User.findOne({
-      where: { referralCode: currentUser.referralCode },
-      include: [{
-        model: db.ReferralCodes,
-        as: 'referral'
-      }]
+    const referrer = await db.ReferralCode.findOne({
+      where: { code: referralCode },
     });
-
-    return referrer; // Trả về thông tin người giới thiệu, hoặc null nếu không tìm thấy
+    let currentUser = await db.User.findOne({
+      where: { id: referrer.userId },
+      attributes: {
+        exclude: ["password"],
+      },
+    });
+    return currentUser ? currentUser : null; // Trả về thông tin người giới thiệu, hoặc null nếu không tìm thấy
   } catch (error) {
     console.error("Error finding referrer:", error);
+    return null;
   }
 };
 
-export const updateDatabaseWithDiscount = async (userId, discount) => {
-  // Kiểm tra đầu vào hợp lệ
-  if (typeof discount !== "number" || discount < 0) {
-    throw new Error("Invalid discount amount");
-  }
+export const updateDatabaseWithDiscount = (
+  userId,
+  discount,
+  projectId,
+  level
+) => {
+  return new Promise(async (resolve, reject) => {
+    // Kiểm tra đầu vào hợp lệ
+    if (typeof discount !== "number" || discount < 0) {
+      return reject(new Error("Invalid discount amount"));
+    }
 
-  try {
-    const referralBonus = await db.ReferralBonus.create({
-      userId: userId,
-      amount: discount,
-      id: generateId(),
-    });
+    try {
+      const newRecord = await db.ReferralBonuses.create({
+        id: generateId(),
+        userId: userId,
+        projectId: projectId,
+        referralLevel: level,
+        amount: discount,
+      });
 
-    return referralBonus; // Trả về bản ghi đã được tạo hoặc cập nhật
-  } catch (error) {
-    // Xử lý lỗi khi cập nhật cơ sở dữ liệu
-    console.error("Error updating database with discount:", error);
-    throw error;
-  }
-}
+      resolve({
+        err: 0,
+        msg: "Create",
+        record: newRecord, // Trả về bản ghi đã được tạo
+      });
+    } catch (error) {
+      console.error("Error updating database with discount:", error);
+      reject(error);
+    }
+  });
+};
