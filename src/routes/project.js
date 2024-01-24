@@ -14,5 +14,6 @@ router.get("/get-project-progress/:projectId", project.getProjectsProgress);
 router.put("/put-project", project.handleEditProject);
 
 router.post("/post-discount", discount.calculateReferralBonuses);
+router.get("/get-discount/:projectId", discount.getReferralBonuses);
 
 export default router;

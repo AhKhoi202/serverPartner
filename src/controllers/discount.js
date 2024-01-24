@@ -1,6 +1,7 @@
 import * as authDiscount from "../services/discount";
 import db from "../models";
 
+// tính chiết khấu cho các cấp và thêm vào database
 export const calculateReferralBonuses = async (req, res) => {
   const projectId = req.body.projectId;
   const project = await db.Project.findOne({
@@ -44,5 +45,22 @@ export const calculateReferralBonuses = async (req, res) => {
     }
     currentUser = referrer;
     console.log(currentUser.name);
+  }
+};
+
+// tiến độ theo dự án
+export const getReferralBonuses = async (req, res) => {
+  const { projectId } = req.params;
+  console.log(projectId);
+  try {
+    const response = await authDiscount.getReferralBonuses({
+      projectId: projectId,
+    });
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at get project progress controller: " + error,
+    });
   }
 };

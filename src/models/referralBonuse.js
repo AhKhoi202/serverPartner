@@ -4,8 +4,16 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ReferralBonuses extends Model {
     static associate(models) {
-      ReferralBonuses.belongsTo(models.User, { foreignKey: "userId" });
-      ReferralBonuses.belongsTo(models.Project, { foreignKey: "projectId" });
+      ReferralBonuses.belongsTo(models.User, {
+        foreignKey: "userId",
+        targetKey: "id",
+        as: "user",
+      });
+      ReferralBonuses.belongsTo(models.Project, {
+        foreignKey: "projectId",
+        targetKey: "id",
+        as: "project",
+      });
     }
   }
   ReferralBonuses.init(

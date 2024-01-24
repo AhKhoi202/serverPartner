@@ -65,7 +65,7 @@ export const getAllProject = async (req, res) => {
 // tiến độ theo dự án
 export const getProjectsProgress = async (req, res) => {
   const { projectId } = req.params;
-  console.log(projectId)
+  // console.log(projectId)
   try {
     const response = await services.getProjectsProgress({
       projectId: projectId,
@@ -82,7 +82,7 @@ export const getProjectsProgress = async (req, res) => {
 export const updateProjectProgress = async (req, res) => {
   try {
     const { projectId, updateDate } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     if (!projectId || !updateDate)
       return res.status(400).json({
         err: 1,

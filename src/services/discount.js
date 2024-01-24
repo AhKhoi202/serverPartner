@@ -1,6 +1,8 @@
 const db = require("../models");
 import { v4 as generateId } from "uuid";
 
+
+// tìm thông tin người giới thiệu liên quan
 export const findReferrer = async (referralCode) => {
   try {
     const referrer = await db.ReferralCode.findOne({
@@ -19,6 +21,8 @@ export const findReferrer = async (referralCode) => {
   }
 };
 
+
+// thêm người giới thiệu và chiết khấu vào ReferralBonuses
 export const updateDatabaseWithDiscount = (
   userId,
   discount,
@@ -50,4 +54,35 @@ export const updateDatabaseWithDiscount = (
       reject(error);
     }
   });
+};
+
+
+// lấy thông tin chiết khấu dự án
+export const getReferralBonuses = async (...args) => {
+  const whereCondition = {};
+  if (args.length > 0) {
+    args.forEach((arg) => {
+      if (arg.projectId) {
+        whereCondition["projectId"] = arg.projectId;
+      }
+    });
+  }
+  const response = await db.ReferralBonuses.findAll({
+    where: whereCondition,
+    raw: false,
+    include: [
+      {
+        model: db.User,
+        as: "user",
+        attributes: { exclude: ["password"]},
+        nest: true,
+      },
+    ],
+    ...args,
+  });
+  return {
+    err: response ? 0 : 1,
+    msg: response ? "Get Referral Bonuses ok" : "Failed to get Referral Bonuses.",
+    response,
+  };
 };
