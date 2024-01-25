@@ -12,43 +12,48 @@ export const calculateReferralBonuses = async (req, res) => {
     where: { id: project.userId },
   });
   let level = 1;
-  const maxReferralLevel = 3; //xét đến cấp 3
-  const discountRates = { 1: 0.05, 2: 0.02, 3: 0.01 }; // Tỷ lệ chiết khấu cho mỗi cấp
+  const discountRates = { 1: 4, 2: 2, 3: 1, 4: 0.5, 5: 0.5 }; // Tỷ lệ chiết khấu cho mỗi cấp
 
-  const discount = project.actualRevenue * discountRates[level];
+  // const discount = project.actualRevenue * discountRates[level];
+  const discount = discountRates[level];
+
+  console.log(currentUser.name);
+  console.log(level);
   console.log(discount);
-  await authDiscount.updateDatabaseWithDiscount(
+  // lưu người dùng trực tiếp giới thiệu dự án vào bảng ReferralBonuses
+  await authDiscount.createReferralBonuses(
     currentUser.id,
     discount,
     projectId,
     level
   );
-  console.log(level);
-  console.log(currentUser.name);
-
-  while (currentUser.referralCode && level <= maxReferralLevel) {
+  // tìm những người giới thiệu có liên quan
+  while (currentUser.referralCode && level in discountRates) {
+    // láy người dùng gàn nhất
     const referrer = await authDiscount.findReferrer(currentUser.referralCode);
-    // console.log(referrer)
     if (referrer) {
       level++;
-      const discount = project.actualRevenue * discountRates[level];
+      // tính amount của ngừi dùng liên quan theo cấp giới thiệu
+      // const discount = project.actualRevenue * discountRates[level];
+      console.log(referrer.name);
+      console.log(level);
+      const discount = discountRates[level];
       console.log(discount);
-      await authDiscount.updateDatabaseWithDiscount(
+      // thêm người dùng có liên quan vào bảng ReferralBonuses
+      await authDiscount.createReferralBonuses(
         referrer.id,
         discount,
         projectId,
         level
       );
-      console.log(level);
     } else {
       break; // Kết thúc vòng lặp nếu không tìm thấy người giới thiệu
     }
     currentUser = referrer;
-    console.log(currentUser.name);
   }
 };
 
-// tiến độ theo dự án
+// thong tin người giới thiệu và chiết khấu theo dự án
 export const getReferralBonuses = async (req, res) => {
   const { projectId } = req.params;
   console.log(projectId);
@@ -61,6 +66,25 @@ export const getReferralBonuses = async (req, res) => {
     return res.status(500).json({
       err: -1,
       msg: "Failed at get project progress controller: " + error,
+    });
+  }
+};
+
+// thay đổi mwucs chiết khấu Referral Bonuses
+export const handleUpdateReferralBonuses = async (req, res) => {
+  const payload = req.body;
+  try {
+    if (!payload)
+      return res.status(400).json({
+        err: 1,
+        msg: "khong co payload",
+      });
+    const response = await authDiscount.updateReferralBonuses(payload);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at handleUpdateReferralBonuses controller: " + error,
     });
   }
 };

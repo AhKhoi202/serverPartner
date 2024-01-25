@@ -23,18 +23,12 @@ export const findReferrer = async (referralCode) => {
 
 
 // thêm người giới thiệu và chiết khấu vào ReferralBonuses
-export const updateDatabaseWithDiscount = (
-  userId,
-  discount,
-  projectId,
-  level
-) => {
+export const createReferralBonuses = (userId, discount, projectId, level) => {
   return new Promise(async (resolve, reject) => {
     // Kiểm tra đầu vào hợp lệ
     if (typeof discount !== "number" || discount < 0) {
       return reject(new Error("Invalid discount amount"));
     }
-
     try {
       const newRecord = await db.ReferralBonuses.create({
         id: generateId(),
@@ -85,4 +79,24 @@ export const getReferralBonuses = async (...args) => {
     msg: response ? "Get Referral Bonuses ok" : "Failed to get Referral Bonuses.",
     response,
   };
+};
+
+//ccapj nhật muacs chiết khấu ReferralBonuses
+export const updateReferralBonuses = async (payload) => {
+  try {
+    const response = await db.ReferralBonuses.update(payload, {
+      where: { id: payload.id },
+      raw: true,
+    });
+
+    return {
+      err: response[0] > 0 ? 0 : 1,
+      msg:
+        response[0] > 0
+          ? "Update Referral Bonuses"
+          : "Failed to update Referral Bonuses",
+    };
+  } catch (error) {
+    throw error;
+  }
 };
