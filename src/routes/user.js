@@ -4,6 +4,7 @@ import * as userController from "../controllers/user";
 
 const router = express.Router();
 
+router.use(verifyToken);
 router.post("/reset-password/:token", userController.resetPassword);
 router.get("/forgot-password", userController.forgotPassword);
 router.put("/edit-customer", userController.handleEditCustomers);
@@ -13,7 +14,6 @@ router.delete("/delete-user", userController.handleDeleteUsers);
 router.get("/get-Allcustomers", userController.getAllCustomers);
 router.get("/get-Allusers", userController.getAllUser);
 
-router.use(verifyToken);
 router.get("/get-current", userController.getCurrent);
 router.put("/", userController.updateUser);
 router.post("/new-customers", userController.createCustomers);

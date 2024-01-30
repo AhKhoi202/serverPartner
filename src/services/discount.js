@@ -1,6 +1,5 @@
 const db = require("../models");
-import { v4 as generateId } from "uuid";
-
+import { v4 } from "uuid";
 
 // tìm thông tin người giới thiệu liên quan
 export const findReferrer = async (referralCode) => {
@@ -21,7 +20,6 @@ export const findReferrer = async (referralCode) => {
   }
 };
 
-
 // thêm người giới thiệu và chiết khấu vào ReferralBonuses
 export const createReferralBonuses = (userId, discount, projectId, level) => {
   return new Promise(async (resolve, reject) => {
@@ -31,7 +29,7 @@ export const createReferralBonuses = (userId, discount, projectId, level) => {
     }
     try {
       const newRecord = await db.ReferralBonuses.create({
-        id: generateId(),
+        id: v4(),
         userId: userId,
         projectId: projectId,
         referralLevel: level,
@@ -50,7 +48,6 @@ export const createReferralBonuses = (userId, discount, projectId, level) => {
   });
 };
 
-
 // lấy thông tin chiết khấu dự án
 export const getReferralBonuses = async (...args) => {
   const whereCondition = {};
@@ -68,7 +65,7 @@ export const getReferralBonuses = async (...args) => {
       {
         model: db.User,
         as: "user",
-        attributes: { exclude: ["password"]},
+        attributes: { exclude: ["password"] },
         nest: true,
       },
     ],
@@ -76,12 +73,14 @@ export const getReferralBonuses = async (...args) => {
   });
   return {
     err: response ? 0 : 1,
-    msg: response ? "Get Referral Bonuses ok" : "Failed to get Referral Bonuses.",
+    msg: response
+      ? "Get Referral Bonuses ok"
+      : "Failed to get Referral Bonuses.",
     response,
   };
 };
 
-//ccapj nhật muacs chiết khấu ReferralBonuses
+//cập nhật mức chiết khấu ReferralBonuses
 export const updateReferralBonuses = async (payload) => {
   try {
     const response = await db.ReferralBonuses.update(payload, {

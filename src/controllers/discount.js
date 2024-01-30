@@ -1,4 +1,4 @@
-import * as authDiscount from "../services/discount";
+import * as discount from "../services/discount";
 import db from "../models";
 
 // tính chiết khấu cho các cấp và thêm vào database
@@ -21,7 +21,7 @@ export const calculateReferralBonuses = async (req, res) => {
   console.log(level);
   console.log(discount);
   // lưu người dùng trực tiếp giới thiệu dự án vào bảng ReferralBonuses
-  await authDiscount.createReferralBonuses(
+  await discount.createReferralBonuses(
     currentUser.id,
     discount,
     projectId,
@@ -30,7 +30,7 @@ export const calculateReferralBonuses = async (req, res) => {
   // tìm những người giới thiệu có liên quan
   while (currentUser.referralCode && level in discountRates) {
     // láy người dùng gàn nhất
-    const referrer = await authDiscount.findReferrer(currentUser.referralCode);
+    const referrer = await discount.findReferrer(currentUser.referralCode);
     if (referrer) {
       level++;
       // tính amount của ngừi dùng liên quan theo cấp giới thiệu
@@ -40,7 +40,7 @@ export const calculateReferralBonuses = async (req, res) => {
       const discount = discountRates[level];
       console.log(discount);
       // thêm người dùng có liên quan vào bảng ReferralBonuses
-      await authDiscount.createReferralBonuses(
+      await discount.createReferralBonuses(
         referrer.id,
         discount,
         projectId,
@@ -58,7 +58,7 @@ export const getReferralBonuses = async (req, res) => {
   const { projectId } = req.params;
   console.log(projectId);
   try {
-    const response = await authDiscount.getReferralBonuses({
+    const response = await discount.getReferralBonuses({
       projectId: projectId,
     });
     return res.status(200).json(response);
@@ -70,7 +70,7 @@ export const getReferralBonuses = async (req, res) => {
   }
 };
 
-// thay đổi mwucs chiết khấu Referral Bonuses
+// thay đổi mức chiết khấu Referral Bonuses
 export const handleUpdateReferralBonuses = async (req, res) => {
   const payload = req.body;
   try {
@@ -79,7 +79,7 @@ export const handleUpdateReferralBonuses = async (req, res) => {
         err: 1,
         msg: "khong co payload",
       });
-    const response = await authDiscount.updateReferralBonuses(payload);
+    const response = await discount.updateReferralBonuses(payload);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({

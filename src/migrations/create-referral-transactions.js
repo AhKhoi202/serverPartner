@@ -10,13 +10,24 @@ module.exports = {
       },
       referralBonusId: {
         type: Sequelize.STRING,
+        // allowNull: false,
+      },
+      userId: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      projectId: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       transactionType: {
         type: Sequelize.STRING,
-        defaultValue: 'Thanh toán',
+        defaultValue: "Thanh toán",
       },
       amount: {
+        type: Sequelize.FLOAT,
+      },
+      completionRate: {
         type: Sequelize.FLOAT,
       },
       status: {
