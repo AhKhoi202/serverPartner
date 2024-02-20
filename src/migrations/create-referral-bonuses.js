@@ -22,6 +22,10 @@ module.exports = {
       referralLevel: {
         type: Sequelize.INTEGER,
       },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "Chưa xác nhận",
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

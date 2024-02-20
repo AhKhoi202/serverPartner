@@ -26,7 +26,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       estimatedCosts: {
-        type: DataTypes.FLOAT,
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,

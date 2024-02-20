@@ -19,6 +19,9 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
+      paymentProof: {
+        type: Sequelize.STRING,
+      },
       description: {
         type: Sequelize.STRING,
       },

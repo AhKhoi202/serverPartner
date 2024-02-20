@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "partner_qlv6_user",
-    "password": "TBbeNPRXycFJtOBA7EJtqBegcfoDRPJJ",
-    "database": "partner_qlv6",
-    "host": "dpg-clen89mf27hc73beurtg-a.singapore-postgres.render.com",
+    "username": "bbpartner_user",
+    "password": "WNNqz8CJzySNvqYK59zS603zBLkLMyn0",
+    "database": "bbpartner",
+    "host": "dpg-cna5r1n79t8c73c5k3l0-a.singapore-postgres.render.com",
     "dialect": "postgres",
     "logging": false,
     "dialectOptions": {
@@ -14,10 +14,10 @@
     }
   },
   "production": {
-    "username": "partner_qlv6_user",
-    "password": "TBbeNPRXycFJtOBA7EJtqBegcfoDRPJJ",
-    "database": "partner_qlv6",
-    "host": "dpg-clen89mf27hc73beurtg-a.singapore-postgres.render.com",
+    "username": "bbpartner_user",
+    "password": "WNNqz8CJzySNvqYK59zS603zBLkLMyn0",
+    "database": "bbpartner",
+    "host": "dpg-cna5r1n79t8c73c5k3l0-a.singapore-postgres.render.com",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
