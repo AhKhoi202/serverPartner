@@ -16,15 +16,7 @@ export const getPaymentStages = async (req, res) => {
 // tạo
 export const createPaymentStages = async (req, res) => {
   try {
-    // const { name, customerId, userId } = req.body;
-    // if (!userId || !name || !customerId)
-    //   return res.status(400).json({
-    //     err: 1,
-    //     msg: "missing input",
-    //   });
-
     const response = await payment.createPaymentStage(req.body);
-
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({

@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       paid: DataTypes.FLOAT,
       description: DataTypes.STRING,
       startDate: DataTypes.DATE,
-      endDate: DataTypes.FLOAT,
+      endDate: DataTypes.DATE,
       status: DataTypes.STRING,
     },
     {

@@ -54,12 +54,26 @@ export const calculateReferralBonuses = async (req, res) => {
 };
 
 // thong tin người giới thiệu và chiết khấu theo dự án
-export const getReferralBonuses = async (req, res) => {
+export const getReferralBonusesByProjectId = async (req, res) => {
   const { projectId } = req.params;
-  console.log(projectId);
   try {
     const response = await discount.getReferralBonuses({
       projectId: projectId,
+    });
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at get project progress controller: " + error,
+    });
+  }
+};
+// thong tin người giới thiệu và chiết khấu theo id
+export const getReferralBonusesById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await discount.getReferralBonuses({
+      id: id,
     });
     return res.status(200).json(response);
   } catch (error) {

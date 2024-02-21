@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.STRING,
       projectId: DataTypes.STRING,
       amount: DataTypes.FLOAT,
+      totalAmount: DataTypes.FLOAT,
       referralLevel: DataTypes.INTEGER,
     },
     {

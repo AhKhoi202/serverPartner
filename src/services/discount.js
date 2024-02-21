@@ -56,6 +56,9 @@ export const getReferralBonuses = async (...args) => {
       if (arg.projectId) {
         whereCondition["projectId"] = arg.projectId;
       }
+      if (arg.id) {
+        whereCondition["id"] = arg.id;
+      }
     });
   }
   const response = await db.ReferralBonuses.findAll({
