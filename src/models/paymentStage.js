@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       referralBonusesId: DataTypes.STRING,
       totalAmount: DataTypes.FLOAT,
       paid: DataTypes.FLOAT,
-      paymentProof: DataTypes.STRING,
+      paymentProof: DataTypes.TEXT,
       description: DataTypes.STRING,
       startDate: DataTypes.DATE,
       endDate: DataTypes.DATE,

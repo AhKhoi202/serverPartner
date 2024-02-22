@@ -10,14 +10,14 @@ app.use(cors({
     origin:'*',
     methods: ["POST", "GET", "PUT", "DELETE"]
 }))
-app.use(express.json()) //đọc dữ liệu đc gửi lên từ client
-app.use(express.urlencoded({extended:true})) //đọc data gửi từ client dạng form data
+//đọc dữ liệu đc gửi lên từ client
+app.use(express.json({ limit: '50mb' }));
+//đọc data gửi từ client dạng form data
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 //=> đọc dữ liệu của api từ client gửi lên
 
 initRoutes(app)
 connectDatabase()
-
-
 
 const port = process.env.PORT || 8888
 const listener = app.listen(port, () => {

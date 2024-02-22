@@ -1,7 +1,7 @@
 import db from "../models";
 import { v4 } from "uuid";
 
-//lấy thông tin 
+//lấy thông tin
 export const getPaymentStages = async (...args) => {
   const whereCondition = {};
   if (args.length > 0) {
@@ -51,8 +51,7 @@ export const createPaymentStage = (body) =>
     }
   });
 
-
-  // Xóa theo id
+// Xóa theo id
 export const deletePaymentStageById = async (id) => {
   try {
     const response = await db.PaymentStage.destroy({
@@ -62,12 +61,36 @@ export const deletePaymentStageById = async (id) => {
     });
     return {
       err: response ? 0 : 1,
-      msg: response ? "Delete PaymentStage ok" : "Failed to delete PaymentStage.",
+      msg: response
+        ? "Delete PaymentStage ok"
+        : "Failed to delete PaymentStage.",
     };
   } catch (error) {
     return {
       err: 1,
       msg: "Failed to delete PaymentStage.",
+      error: error,
+    };
+  }
+};
+
+// cập nhật - hình ảnh chứng minh
+export const updatePaymentStage = async (payload) => {
+  try {
+    const response = await db.PaymentStage.update(payload, {
+      where: { id: payload.id },
+      raw: true,
+    });
+    return {
+      err: response ? 0 : 1,
+      msg: response
+        ? "Update PaymentProof ok"
+        : "Failed to update PaymentProof.",
+    };
+  } catch (error) {
+    return {
+      err: 1,
+      msg: "Failed to update PaymentProof.",
       error: error,
     };
   }
