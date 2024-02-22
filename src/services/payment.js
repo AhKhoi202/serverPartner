@@ -1,12 +1,11 @@
 import db from "../models";
 import { v4 } from "uuid";
 
+//lấy thông tin 
 export const getPaymentStages = async (...args) => {
   const whereCondition = {};
   if (args.length > 0) {
     // Xử lý các đối số đặc biệt như referralBonusesId và projectId
-    console.log(args);
-
     args.forEach((arg) => {
       if (arg.referralBonusesId) {
         whereCondition["referralBonusesId"] = arg.referralBonusesId;
@@ -51,3 +50,25 @@ export const createPaymentStage = (body) =>
       reject(error);
     }
   });
+
+
+  // Xóa theo id
+export const deletePaymentStageById = async (id) => {
+  try {
+    const response = await db.PaymentStage.destroy({
+      where: {
+        id: id,
+      },
+    });
+    return {
+      err: response ? 0 : 1,
+      msg: response ? "Delete PaymentStage ok" : "Failed to delete PaymentStage.",
+    };
+  } catch (error) {
+    return {
+      err: 1,
+      msg: "Failed to delete PaymentStage.",
+      error: error,
+    };
+  }
+};

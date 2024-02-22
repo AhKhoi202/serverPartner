@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: DataTypes.STRING,
       projectId: DataTypes.STRING,
+      status: DataTypes.STRING,
       amount: DataTypes.FLOAT,
       totalAmount: DataTypes.FLOAT,
       referralLevel: DataTypes.INTEGER,
