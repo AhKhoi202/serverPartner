@@ -59,7 +59,7 @@ export const registerService = async ({
         id: v4(),
       },
     });
-console.log(response[0].id);
+// console.log(response[0].id);
     const selfReferralCode = await generateSelfReferralCode(email);
     await db.ReferralCode.create({
       code: selfReferralCode,

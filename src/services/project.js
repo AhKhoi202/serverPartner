@@ -20,7 +20,6 @@ export const createProjectService = (body) =>
 
 // get thong tin khách hàng theo id
 export const getCustomerById = async (id) => {
-  // console.log(id)
   if (!id) {
     return {
       err: 1,
@@ -68,7 +67,6 @@ export const getProjects = async (...args) => {
   const whereCondition = {};
   if (args.length > 0) {
     // Xử lý các đối số đặc biệt như userId và projectId
-    console.log(args);
 
     args.forEach((arg) => {
       if (arg.userId) {

@@ -1,4 +1,4 @@
-import * as discount from "../services/discount";
+import * as discounts from "../services/discount";
 import db from "../models";
 
 // tính chiết khấu cho các cấp và thêm vào database
@@ -7,40 +7,33 @@ export const calculateReferralBonuses = async (req, res) => {
   const project = await db.Project.findOne({
     where: { id: projectId },
   });
-  console.log(project.name);
   let currentUser = await db.User.findOne({
     where: { id: project.userId },
   });
   let level = 1;
   const discountRates = { 1: 4, 2: 2, 3: 1, 4: 0.5, 5: 0.5 }; // Tỷ lệ chiết khấu cho mỗi cấp
-
   // const discount = project.actualRevenue * discountRates[level];
   const discount = discountRates[level];
-
-  console.log(currentUser.name);
-  console.log(level);
-  console.log(discount);
   // lưu người dùng trực tiếp giới thiệu dự án vào bảng ReferralBonuses
-  await discount.createReferralBonuses(
+  const a = await discounts.createReferralBonuses(
     currentUser.id,
     discount,
     projectId,
     level
   );
+  // console.log(a)
   // tìm những người giới thiệu có liên quan
   while (currentUser.referralCode && level in discountRates) {
     // láy người dùng gàn nhất
-    const referrer = await discount.findReferrer(currentUser.referralCode);
+    const referrer = await discounts.findReferrer(currentUser.referralCode);
+    console.log(referrer)
     if (referrer) {
       level++;
       // tính amount của ngừi dùng liên quan theo cấp giới thiệu
       // const discount = project.actualRevenue * discountRates[level];
-      console.log(referrer.name);
-      console.log(level);
       const discount = discountRates[level];
-      console.log(discount);
       // thêm người dùng có liên quan vào bảng ReferralBonuses
-      await discount.createReferralBonuses(
+      await discounts.createReferralBonuses(
         referrer.id,
         discount,
         projectId,
@@ -57,14 +50,14 @@ export const calculateReferralBonuses = async (req, res) => {
 export const getReferralBonusesByProjectId = async (req, res) => {
   const { projectId } = req.params;
   try {
-    const response = await discount.getReferralBonuses({
+    const response = await discounts.getReferralBonuses({
       projectId: projectId,
     });
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({
       err: -1,
-      msg: "Failed at get project progress controller: " + error,
+      msg: "Failed at get Referral Bonuses controller: " + error,
     });
   }
 };
@@ -72,14 +65,14 @@ export const getReferralBonusesByProjectId = async (req, res) => {
 export const getReferralBonusesById = async (req, res) => {
   const { id } = req.params;
   try {
-    const response = await discount.getReferralBonuses({
+    const response = await discounts.getReferralBonuses({
       id: id,
     });
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({
       err: -1,
-      msg: "Failed at get project progress controller: " + error,
+      msg: "Failed at get Referral Bonuses By Id controller: " + error,
     });
   }
 };
@@ -93,7 +86,7 @@ export const handleUpdateReferralBonuses = async (req, res) => {
         err: 1,
         msg: "khong co payload",
       });
-    const response = await discount.updateReferralBonuses(payload);
+    const response = await discounts.updateReferralBonuses(payload);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json({
