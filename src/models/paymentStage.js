@@ -1,5 +1,6 @@
 "customer strict";
 const { Model } = require("sequelize");
+//Bảng này lưu thông tin các giai đoạn thanh toán hoa hồng cho partner
 module.exports = (sequelize, DataTypes) => {
   class PaymentStage extends Model {
     static associate(models) {
@@ -18,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       paid: DataTypes.FLOAT,
       paymentProof: DataTypes.TEXT,
       description: DataTypes.STRING,
-      startDate: DataTypes.DATE,
+      paymentDate: DataTypes.DATE,
       endDate: DataTypes.DATE,
       status: DataTypes.STRING,
     },

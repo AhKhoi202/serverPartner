@@ -10,4 +10,9 @@ router.post("/post-payment-stages", payment.createPaymentStages);
 router.delete("/delete-payment-stages", payment.deletePaymentStages);
 router.put("/put-payment-stages", payment.updatePaymentStages);
 
+router.get("/get-payment-project/:projectId", payment.getPaymentProject);
+router.post("/post-payment-project", payment.createPaymentProject);
+router.delete("/delete-payment-project", payment.deletePaymentProject);
+router.put("/put-payment-project", payment.updatePaymentProject    );
+
 export default router;

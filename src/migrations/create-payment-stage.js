@@ -20,12 +20,12 @@ module.exports = {
         allowNull: false,
       },
       paymentProof: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       description: {
         type: Sequelize.STRING,
       },
-      startDate: {
+      paymentDate: {
         type: Sequelize.DATE,
       },
       endDate: {
