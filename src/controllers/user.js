@@ -38,10 +38,9 @@ export const updateUser = async (req, res) => {
 };
 //tao khach hang tiem nang
 export const createCustomers = async (req, res) => {
+  const { name, phone, email } = req.body;
+  const userId = req.user.id;
   try {
-    const { name, phone, email } = req.body;
-    const { userId } = req.user;
-
     if (!userId || !name || !phone || !email)
       return res.status(400).json({
         err: 1,
@@ -180,7 +179,7 @@ export const forgotPassword = async (req, res) => {
     const token = jwt.sign({ id: user.id }, "jwt_secret_key", {
       expiresIn: "15m",
     });
-    ForgotPassword( email, token);
+    ForgotPassword(email, token);
     return res.status(200).json({
       err: 0,
     });
