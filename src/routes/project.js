@@ -6,6 +6,7 @@ import * as discount from "../controllers/discount";
 const router = express.Router();
 router.use(verifyToken);
 router.post("/new-project", project.createProject);
+router.get("/get-project/:projectId", project.getProjectById);
 router.get("/get-customer/:customerId", project.getCustomerById);
 router.get("/get-projects", project.getProjectsUser);
 router.get("/get-all-projects", project.getAllProject);

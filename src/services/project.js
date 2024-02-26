@@ -19,6 +19,23 @@ export const createProjectService = (body) =>
   });
 
 // get thong tin khách hàng theo id
+export const getProjectById = async (id) => {
+  if (!id) {
+    return {
+      err: 1,
+      msg: "Invalid Project ID",
+      project: null,
+    };
+  }
+  const response = await db.Project.findOne({ where: { id } });
+  // console.log(response)
+  return {
+    err: response ? 0 : 1,
+    msg: response ? "Get Project by Id successful" : "Project not found" + id,
+    project: response,
+  };
+};
+// get thong tin khách hàng theo id
 export const getCustomerById = async (id) => {
   if (!id) {
     return {

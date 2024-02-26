@@ -96,8 +96,7 @@ export const updatePaymentStage = async (payload) => {
   }
 };
 
-
-
+//======================================================
 //lấy thông tin
 export const getPaymentProject = async (...args) => {
   const whereCondition = {};
@@ -129,21 +128,22 @@ export const getPaymentProject = async (...args) => {
 };
 
 //tạo giai đoạn thanh toán cho PaymentProject
-export const createPaymentProject = (body) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      await db.PaymentProject.create({
-        ...body,
-        id: v4(),
-      });
-      resolve({
-        err: 0,
-        msg: "Create",
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
+export const createPaymentProject = async (body) => {
+  try {
+    await db.PaymentProject.create({
+      ...body,
+      status:"Chưa thanh toán",
+      id: v4(),
+    });
+    return {
+      err: 0,
+      msg: "Create",
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 // Xóa theo id giai đoạn thanh toán cho PaymentProject
 export const deletePaymentProjectById = async (id) => {
@@ -170,6 +170,7 @@ export const deletePaymentProjectById = async (id) => {
 
 // cập nhật - hình ảnh chứng minh giai đoạn thanh toán cho partner
 export const updatePaymentProject = async (payload) => {
+  console.log(payload)
   try {
     const response = await db.PaymentProject.update(payload, {
       where: { id: payload.id },

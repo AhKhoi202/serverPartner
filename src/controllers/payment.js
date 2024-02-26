@@ -72,7 +72,7 @@ export const getPaymentProject = async (req, res) => {
   }
 };
 
-// tạo
+// tạo giao doan thanh toan cho du an
 export const createPaymentProject = async (req, res) => {
   try {
     const response = await payment.createPaymentProject(req.body);

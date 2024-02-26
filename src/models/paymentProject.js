@@ -1,5 +1,6 @@
 "customer strict";
 const { Model } = require("sequelize");
+//Bảng này lưu thông tin các giai đoạn thanh toán dự án
 module.exports = (sequelize, DataTypes) => {
   class PaymentProject extends Model {
     static associate(models) {

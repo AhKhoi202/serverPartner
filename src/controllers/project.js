@@ -22,6 +22,19 @@ export const createProject = async (req, res) => {
 };
 
 // lay thong tin khách hàng khi tạo dự án
+export const getProjectById = async (req, res) => {
+  const { projectId } = req.params;
+  try {
+    const response = await services.getProjectById(projectId);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at get Project by Id controller: " + error,
+    });
+  }
+};
+// lay thong tin khách hàng khi tạo dự án
 export const getCustomerById = async (req, res) => {
   const { customerId } = req.params;
   try {
