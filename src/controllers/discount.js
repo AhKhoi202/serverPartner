@@ -26,7 +26,7 @@ export const calculateReferralBonuses = async (req, res) => {
   while (currentUser.referralCode && level in discountRates) {
     // láy người dùng gàn nhất
     const referrer = await discounts.findReferrer(currentUser.referralCode);
-    console.log(referrer)
+    // console.log(referrer)
     if (referrer) {
       level++;
       // tính amount của ngừi dùng liên quan theo cấp giới thiệu

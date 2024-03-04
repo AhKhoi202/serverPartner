@@ -170,7 +170,7 @@ export const deletePaymentProjectById = async (id) => {
 
 // cập nhật - hình ảnh chứng minh giai đoạn thanh toán cho partner
 export const updatePaymentProject = async (payload) => {
-  console.log(payload)
+  // console.log(payload)
   try {
     const response = await db.PaymentProject.update(payload, {
       where: { id: payload.id },
