@@ -1,7 +1,7 @@
 import db from "../models";
 import { Sequelize } from "sequelize";
 
-// thống kê thu nhập theo tháng
+// thống kê thu nhập theo tháng từ hợp đồng
 export const revenueStatisticsProjectByMonth = async () => {
   try {
     const result = await db.Project.findAll({
@@ -34,8 +34,8 @@ export const revenueStatisticsProjectByMonth = async () => {
     return { err: 1, msg: error.message, data: null };
   }
 };
-
-// thu nhập theo năm
+// thu nhập theo năm  từ hợp đồng
+//=======================================================================
 export const revenueStatisticsProjectByYear = async () => {
   try {
     const result = await db.Project.findAll({
@@ -65,8 +65,74 @@ export const revenueStatisticsProjectByYear = async () => {
     return { err: 1, msg: error.message, data: null };
   }
 };
-
-// thống kê thu nhập từ dự án theo tháng (các giai đoạn trả từ khách)
+// thống kê tổng thu nhập từ dự án theo tháng (các giai đoạn trả từ khách)
+export const getTotalPayByMonthAndYear = async (year) => {
+  try {
+    const result = await db.PaymentProject.findAll({
+      attributes: [
+        // Sử dụng EXTRACT để lấy tháng và năm từ cột paymentDate
+        [
+          Sequelize.fn(
+            "EXTRACT",
+            Sequelize.literal('MONTH FROM "paymentDate"')
+          ),
+          "month",
+        ],
+        [
+          Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
+          "year",
+        ],
+        [Sequelize.fn("SUM", Sequelize.col("pay")), "totalPay"],
+      ],
+      where: Sequelize.where(
+        Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
+        year
+      ),
+      group: [
+        Sequelize.fn("EXTRACT", Sequelize.literal('MONTH FROM "paymentDate"')),
+        Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
+      ],
+      order: [
+        [
+          Sequelize.fn(
+            "EXTRACT",
+            Sequelize.literal('MONTH FROM "paymentDate"')
+          ),
+          "ASC",
+        ],
+      ],
+    });
+    return { err: 0, msg: "Success", data: result };
+  } catch (error) {
+    return { err: 1, msg: error.message, data: null };
+  }
+};
+// thống kê tổng thu nhập từ dự án theo năm (các giai đoạn trả từ khách)
+export const getTotalPayByYear = async (year) => {
+  try {
+    const result = await db.PaymentProject.findAll({
+      attributes: [
+        // Trích xuất năm từ cột paymentDate và nhóm theo năm
+        [
+          Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
+          "year",
+        ],
+        [Sequelize.fn("SUM", Sequelize.col("pay")), "totalPay"],
+      ],
+      where: Sequelize.where(
+        Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
+        year
+      ),
+      group: [
+        Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
+      ],
+    });
+    return { err: 0, msg: "Success", data: result };
+  } catch (error) {
+    return { err: 1, msg: error.message, data: null };
+  }
+};
+// thống kê từng lần thanh toán theo tháng
 export const getPaymentProjectByMonth = async (month, year) => {
   try {
     const response = await db.PaymentProject.findAll({
@@ -114,9 +180,11 @@ export const getPaymentProjectByMonth = async (month, year) => {
   }
 };
 
-export const getTotalPayByMonthAndYear = async (year) => {
+export const getTotalPayPartnerByMonthAndYear = async (year) => {
+  console.log(year);
+
   try {
-    const result = await db.PaymentProject.findAll({
+    const result = await db.PaymentStage.findAll({
       attributes: [
         // Sử dụng EXTRACT để lấy tháng và năm từ cột paymentDate
         [
@@ -130,7 +198,7 @@ export const getTotalPayByMonthAndYear = async (year) => {
           Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
           "year",
         ],
-        [Sequelize.fn("SUM", Sequelize.col("pay")), "totalPay"],
+        [Sequelize.fn("SUM", Sequelize.col("paid")), "totalPay"],
       ],
       where: Sequelize.where(
         Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
@@ -155,29 +223,3 @@ export const getTotalPayByMonthAndYear = async (year) => {
     return { err: 1, msg: error.message, data: null };
   }
 };
-
-export const getTotalPayByYear = async (year) => {
-  try {
-    const result = await db.PaymentProject.findAll({
-      attributes: [
-        // Trích xuất năm từ cột paymentDate và nhóm theo năm
-        [
-          Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
-          "year",
-        ],
-        [Sequelize.fn("SUM", Sequelize.col("pay")), "totalPay"],
-      ],
-      where: Sequelize.where(
-        Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
-        year
-      ),
-      group: [
-        Sequelize.fn("EXTRACT", Sequelize.literal('YEAR FROM "paymentDate"')),
-      ],
-    });
-    return { err: 0, msg: "Success", data: result };
-  } catch (error) {
-    return { err: 1, msg: error.message, data: null };
-  }
-};
-
