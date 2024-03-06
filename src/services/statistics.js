@@ -35,7 +35,6 @@ export const revenueStatisticsProjectByMonth = async () => {
   }
 };
 // thu nhập theo năm  từ hợp đồng
-//=======================================================================
 export const revenueStatisticsProjectByYear = async () => {
   try {
     const result = await db.Project.findAll({
@@ -65,6 +64,8 @@ export const revenueStatisticsProjectByYear = async () => {
     return { err: 1, msg: error.message, data: null };
   }
 };
+//=======================================================================
+
 // thống kê tổng thu nhập từ dự án theo tháng (các giai đoạn trả từ khách)
 export const getTotalPayByMonthAndYear = async (year) => {
   try {
@@ -179,10 +180,9 @@ export const getPaymentProjectByMonth = async (month, year) => {
     return { err: 1, msg: error.message, data: null };
   }
 };
-
+//=============================
+// chiết khấu cho partner theo từng tháng
 export const getTotalPayPartnerByMonthAndYear = async (year) => {
-  console.log(year);
-
   try {
     const result = await db.PaymentStage.findAll({
       attributes: [
@@ -219,6 +219,68 @@ export const getTotalPayPartnerByMonthAndYear = async (year) => {
       ],
     });
     return { err: 0, msg: "Success", data: result };
+  } catch (error) {
+    return { err: 1, msg: error.message, data: null };
+  }
+};
+
+// thống kê từng lần thanh toán partner theo tháng
+export const getPaymentPartnerByMonth = async (month, year) => {
+  try {
+    const response = await db.PaymentStage.findAll({
+      where: {
+        [Sequelize.Op.and]: [
+          Sequelize.where(
+            Sequelize.fn(
+              "EXTRACT",
+              Sequelize.literal('MONTH FROM "PaymentStage"."paymentDate"')
+            ),
+            "=",
+            month
+          ),
+          Sequelize.where(
+            Sequelize.fn(
+              "EXTRACT",
+              Sequelize.literal('YEAR FROM "PaymentStage"."paymentDate"')
+            ),
+            "=",
+            year
+          ),
+        ],
+      },
+      include: [
+        {
+          model: db.ReferralBonuses,
+          as: "referralBonuses",
+          required: true,
+          include: [
+            {
+              model: db.Project,
+              as: "project",
+              required: true,
+            },
+            {
+              model: db.User,
+              as: "user",
+              required: true,
+              attributes: {
+                exclude: ["password"],
+              },
+            },
+          ],
+        },
+      ],
+    });
+    return {
+      err: response ? 0 : 1,
+      msg: response
+        ? "getPaymentPartnerByMonth successful"
+        : "getPaymentPartnerByMonth not found for month " +
+          month +
+          " and year " +
+          year,
+      data: response,
+    };
   } catch (error) {
     return { err: 1, msg: error.message, data: null };
   }

@@ -1,6 +1,6 @@
 import * as statistics from "../services/statistics";
 
-// thông tin tổng thanh toán của các giai đoạn theo từng tháng và năm
+// thông tin tổng nhận thanh toán của các giai đoạn theo từng tháng và năm
 export const revenueStatisticsProject = async (req, res) => {
   const year = req.query.year;
   try {
@@ -18,7 +18,7 @@ export const revenueStatisticsProject = async (req, res) => {
   }
 };
 
-// thống kê từng lần thanh toán theo tháng
+// thống kê từng lần nhận thanh toán dự án theo tháng
 export const getPaymentProjectByMonth = async (req, res) => {
   const month = req.query.month;
   const year = req.query.year;
@@ -50,6 +50,25 @@ export const getTotalPayPartnerByMonthAndYear = async (req, res) => {
     return res.status(500).json({
       err: -1,
       msg: "Failed at getTotalPayPartnerByMonthAndYear controller: " + error,
+    });
+  }
+};
+
+// thống kê từng lần thanh toán chiết khấu partner theo tháng
+export const getPaymentPartnerByMonth = async (req, res) => {
+  const month = req.query.month;
+  const year = req.query.year;
+
+  try {
+    const monthStatistics = await statistics.getPaymentPartnerByMonth(
+      month,
+      year
+    );
+    return res.status(200).json(monthStatistics);
+  } catch (error) {
+    return res.status(500).json({
+      err: -1,
+      msg: "Failed at getPaymentProjectByMonth controller: " + error,
     });
   }
 };
